@@ -168,7 +168,7 @@ int main() {
     }
 
     waitKey(0);
-    destroyAllWindows(); // optional: close before next image
+    destroyAllWindows(); 
     return 0;
 }
 
