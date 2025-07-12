@@ -123,49 +123,53 @@ Mat Sobelfilter(const Mat& original_image) {
 
 
 int main() {
-    string imagePath = "filter1_img.jpg";
+    string imagePath = "";
 
-    // Load the image in color
-    // The image matrix
-    Mat image = imread(imagePath, IMREAD_COLOR);
+    for (int i = 0; i <= 1; ++i) {
+        if (i == 0) {
+            imagePath = "filter1_img.jpg";
+        } else {
+            imagePath = "filter2_img.jpg";
+        }
 
-    if (image.empty()) {
-        ::cerr << "Error: Could not read the image.\n";
-        return -1;
+        Mat image = imread(imagePath, IMREAD_COLOR);
+        if (image.empty()) {
+            cerr << "Error: Could not read the image.\n";
+            continue;  // move on to next image
+        }
+
+        // Define kernels
+        float kernel3x3[3][3] = {
+            {1, 2, 1},
+            {2, 4, 2},
+            {1, 2, 1}
+        };
+
+        float kernel5x5[5][5] = {
+            {1, 4, 7, 4, 1},
+            {4,16,26,16, 4},
+            {7,26,41,26, 7},
+            {4,16,26,16, 4},
+            {1, 4, 7, 4, 1}
+        };
+
+        matrixScaler(kernel3x3, 1.0f / 16.0f);
+        matrixScaler(kernel5x5, 1.0f / 273.0f);
+
+        Mat filtered3x3 = applyFilterColor(image, kernel3x3);
+        Mat filtered5x5 = applyFilterColor(image, kernel5x5);
+        Mat sobel_image = Sobelfilter(image);
+
+        imshow("Original Image " + to_string(i), image);
+        imshow("Filtered 3x3 Gaussian " + to_string(i), filtered3x3);
+        imshow("Filtered 5x5 Gaussian " + to_string(i), filtered5x5);
+        imshow("Sobel " + to_string(i), sobel_image);
+
     }
 
-    // Define kernels
-    float kernel3x3[3][3] = {
-        {1, 2, 1},
-        {2, 4, 2},
-        {1, 2, 1}
-    };
-
-    float kernel5x5[5][5] = {
-        {1, 4, 7, 4, 1},
-        {4,16,26,16, 4},
-        {7,26,41,26, 7},
-        {4,16,26,16, 4},
-        {1, 4, 7, 4, 1}
-    };
-
-    // Scale kernels
-    matrixScaler(kernel3x3, 1.0f / 16.0f);
-    matrixScaler(kernel5x5, 1.0f / 273.0f);
-
-    // Apply both filters
-    Mat filtered3x3 = applyFilterColor(image, kernel3x3);
-    Mat filtered5x5 = applyFilterColor(image, kernel5x5);
-    Mat sobel_image = Sobelfilter(image);
-
-    // Show original and filtered images
-    imshow("Original Image", image);
-    imshow("Filtered 3x3 Gaussian", filtered3x3);
-    imshow("Filtered 5x5 Gaussian", filtered5x5);
-    imshow("Sobel", sobel_image);
-
-
     waitKey(0);
+    destroyAllWindows(); // optional: close before next image
     return 0;
 }
+
 
