@@ -11,10 +11,10 @@ CXXFLAGS = -std=c++11 -Wall -Wshadow -Wunreachable-code \
 OPENCV_FLAGS = `pkg-config --cflags --libs opencv4`
 
 # Target executable
-TARGET = homework_one
+TARGET = part_one 
 
 # Source files
-SOURCES = homework_one.cpp
+SOURCES = part_one.cpp
 
 # Default target
 all: $(TARGET)
