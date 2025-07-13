@@ -9,9 +9,9 @@ def show_keypoints(img, keypoints, title, save_path):
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     plt.imshow(img_rgb)
     for kp in keypoints:
-        plt.plot(kp.pt[0], kp.pt[1], 'r.', markersize=2)
-    plt.title(title)
-    plt.savefig(save_path, bbox_inches='tight')
+        plt.plot(kp.pt[0], kp.pt[1], 'r.', markersize=3)  # Increased from 2 to 3
+    plt.title(f"{title} ({len(keypoints)} keypoints)")
+    plt.savefig(save_path, bbox_inches='tight', dpi=300)  # Added higher DPI
     plt.close()
     print(f"Saved to {save_path}")
 
@@ -41,6 +41,8 @@ def extract_and_match_features(img1, img2, top_k_ratio=0.1):
     sift = cv2.SIFT_create()
     kp1, des1 = sift.detectAndCompute(img1, None)
     kp2, des2 = sift.detectAndCompute(img2, None)
+
+    print(f"Keypoints detected - Image 1: {len(kp1)}, Image 2: {len(kp2)}")
 
     # Save keypoints
     show_keypoints(img1, kp1, "SIFT Keypoints - Image 1", "keypoints_img1.png")

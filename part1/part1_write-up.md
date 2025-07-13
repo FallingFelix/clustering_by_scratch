@@ -42,4 +42,4 @@ $ ./part_one 2   # loads filter2_img.jpg
 
 ### GX and GY Images
 <img src="output/gx_image2.png" alt="Filter2 GX" width="300"/>
-<img src="output/gy_image2.png" alt="Filter2 GY" width
+<img src="output/gy_image2.png" alt="Filter2 GY" width="300"/>
