@@ -9,9 +9,9 @@ def show_keypoints(img, keypoints, title, save_path):
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     plt.imshow(img_rgb)
     for kp in keypoints:
-        plt.plot(kp.pt[0], kp.pt[1], 'r.', markersize=3)  # Increased from 2 to 3
+        plt.plot(kp.pt[0], kp.pt[1], 'r.', markersize=3) 
     plt.title(f"{title} ({len(keypoints)} keypoints)")
-    plt.savefig(save_path, bbox_inches='tight', dpi=300)  # Added higher DPI
+    plt.savefig(save_path, bbox_inches='tight', dpi=300) 
     plt.close()
     print(f"Saved to {save_path}")
 
@@ -21,6 +21,8 @@ def show_matched_features(img1, img2, matched_pairs, save_path):
     h1, w1 = img1.shape[:2]
     h2, w2 = img2.shape[:2]
     vis = np.zeros((max(h1, h2), w1 + w2, 3), dtype=np.uint8)
+
+    #very useful list comprehension
     vis[:h1, :w1, :] = img1
     vis[:h2, w1:w1 + w2, :] = img2
 
