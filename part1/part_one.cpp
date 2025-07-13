@@ -1,7 +1,7 @@
 #include <opencv2/opencv.hpp> 
 #include <iostream>
 #include <vector>
-
+#include <sys/stat.h>
 
 using namespace std;
 using namespace cv;
@@ -12,7 +12,6 @@ using namespace cv;
 #define FIVE_MATRIX_SCALER (1.0f / 273.0f)
 
 template <size_t N>
-
 void matrixScaler(float (&kernal)[N][N], float scalar) {
     for (int i = 0; i < N; ++i)
     {
@@ -167,53 +166,67 @@ Mat dogFilters(const Mat& original_image) {
     return sobel_result;
 }
 
-int main() {
-    string imagePath = "";
 
-    for (int i = 0; i <= 1; ++i) {
-        if (i == 0) {
-            imagePath = "filter1_img.jpg";
-        } else {
-            imagePath = "filter2_img.jpg";
-        }
-
-        Mat image = imread(imagePath, IMREAD_COLOR);
-        if (image.empty()) {
-            cerr << "Error: Could not read the image.\n";
-            continue;  // move on to next image
-        }
-
-        // Define kernels
-        float kernel3x3[3][3] = {
-            {1, 2, 1},
-            {2, 4, 2},
-            {1, 2, 1}
-        };
-
-        float kernel5x5[5][5] = {
-            {1, 4, 7, 4, 1},
-            {4,16,26,16, 4},
-            {7,26,41,26, 7},
-            {4,16,26,16, 4},
-            {1, 4, 7, 4, 1}
-        };
-
-        matrixScaler(kernel3x3, 1.0f / 16.0f);
-        matrixScaler(kernel5x5, 1.0f / 273.0f);
-
-        Mat filtered3x3 = applyFilterColor(image, kernel3x3);
-        Mat filtered5x5 = applyFilterColor(image, kernel5x5);
-        Mat sobel_image = Sobelfilter(image);
-        Mat dog_image= dogFilters(image);
-
-        imshow("Original Image " + to_string(i), image);
-        imshow("Filtered 3x3 Gaussian " + to_string(i), filtered3x3);
-        imshow("Filtered 5x5 Gaussian " + to_string(i), filtered5x5);
-        imshow("Sobel " + to_string(i), sobel_image);
-
+int main(int argc, char** argv) {
+    if (argc != 2) {
+        cerr << "Usage: " << argv[0] << " <image_number: 1 or 2>\n";
+        return 1;
     }
 
+    string flag = argv[1];
+    string imagePath;
+    if (flag == "1") {
+        imagePath = "filter1_img.jpg";
+    } else if (flag == "2") {
+        imagePath = "filter2_img.jpg";
+    } else {
+        cerr << "Invalid flag. Use 1 or 2.\n";
+        return 1;
+    }
+
+    Mat image = imread(imagePath, IMREAD_COLOR);
+    if (image.empty()) {
+        cerr << "Error: Could not read image at " << imagePath << endl;
+        return 1;
+    }
+
+    // Make sure output directory exists
+    mkdir("output", 0755);
+
+    // Define kernels
+    float kernel3x3[3][3] = {
+        {1, 2, 1},
+        {2, 4, 2},
+        {1, 2, 1}
+    };
+    float kernel5x5[5][5] = {
+        {1, 4, 7, 4, 1},
+        {4,16,26,16, 4},
+        {7,26,41,26, 7},
+        {4,16,26,16, 4},
+        {1, 4, 7, 4, 1}
+    };
+
+    matrixScaler(kernel3x3, 1.0f / 16.0f);
+    matrixScaler(kernel5x5, 1.0f / 273.0f);
+
+    Mat filtered3x3 = applyFilterColor(image, kernel3x3);
+    Mat filtered5x5 = applyFilterColor(image, kernel5x5);
+    Mat sobel_image = Sobelfilter(image);
+    Mat dog_image = dogFilters(image);
+
+    imshow("Original " + flag, image);
+    imshow("Filtered 3x3 " + flag, filtered3x3);
+    imshow("Filtered 5x5 " + flag, filtered5x5);
+    imshow("Sobel " + flag, sobel_image);
+    imshow("DoG " + flag, dog_image);
+
+    imwrite("output/filtered3x3_" + flag + ".png", filtered3x3);
+    imwrite("output/filtered5x5_" + flag + ".png", filtered5x5);
+    imwrite("output/sobel_" + flag + ".png", sobel_image);
+    imwrite("output/dog_" + flag + ".png", dog_image);
+
     waitKey(0);
-    destroyAllWindows(); 
+    destroyAllWindows();
     return 0;
 }

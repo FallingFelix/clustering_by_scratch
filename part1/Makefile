@@ -2,9 +2,8 @@
 CXX = g++
 
 # Compiler flags
-CXXFLAGS = -std=c++11 -Wall -Wshadow -Wunreachable-code \
-          -Wredundant-decls -Wmissing-declarations \
-          -Wuninitialized -Wno-unused-parameter -O2
+CXXFLAGS = -std=c++11 -Wall -Wunreachable-code \
+          -Wredundant-decls -Wuninitialized -Wno-unused-parameter -O2
 
 
 # OpenCV flags
@@ -28,13 +27,6 @@ clean:
 	rm -f $(TARGET)
 
 # Rebuild everything
-rebuild: clean all
-
-.PHONY: all clean rebuild
-rebuild: clean all
-
-.PHONY: all clean rebuild
-.PHONY: all clean rebuild
 rebuild: clean all
 
 .PHONY: all clean rebuild
