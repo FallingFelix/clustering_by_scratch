@@ -11,10 +11,9 @@ def show_keypoints(img, keypoints, title, save_path):
     for kp in keypoints:
         plt.plot(kp.pt[0], kp.pt[1], 'r.', markersize=2)
     plt.title(title)
-    plt.axis('off')
     plt.savefig(save_path, bbox_inches='tight')
     plt.close()
-    print(f"[Saved] {save_path}")
+    print(f"Saved to {save_path}")
 
 
 def show_matched_features(img1, img2, matched_pairs, save_path):
@@ -33,10 +32,9 @@ def show_matched_features(img1, img2, matched_pairs, save_path):
     vis_rgb = cv2.cvtColor(vis, cv2.COLOR_BGR2RGB)
     plt.imshow(vis_rgb)
     plt.title("Top 10% Matched Features")
-    plt.axis('off')
     plt.savefig(save_path, bbox_inches='tight')
     plt.close()
-    print(f"[Saved] {save_path}")
+    print(f"Saved to {save_path}")
 
 
 def extract_and_match_features(img1, img2, top_k_ratio=0.1):
@@ -62,7 +60,7 @@ def extract_and_match_features(img1, img2, top_k_ratio=0.1):
     print(f"Top 10% matches retained: {top_n}")
 
     matched_pairs = [(kp1[m.queryIdx].pt, kp2[m.trainIdx].pt) for m in top_matches]
-    show_matched_features(img1, img2, matched_pairs, "top_10_percent_matches.png")
+    show_matched_features(img1, img2, matched_pairs, "matched_points.png")
     return matched_pairs
 
 
