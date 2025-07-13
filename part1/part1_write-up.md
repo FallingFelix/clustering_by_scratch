@@ -23,6 +23,10 @@ $ ./part_one 2   # loads filter2_img.jpg
 ### Difference of Gaussians (DoG)
 <img src="output/dog_1.png" alt="Filter1 DoG" width="300"/>
 
+### GX and GY Images
+<img src="output/gx_image1.png" alt="Filter1 GX" width="300"/>
+<img src="output/gy_image1.png" alt="Filter1 GY" width="300"/>
+
 ## Filter2 Image Results
 ### 3x3 Gaussian Filter
 <img src="output/filtered3x3_2.png" alt="Filter2 3x3 Gaussian" width="300"/>
@@ -35,3 +39,7 @@ $ ./part_one 2   # loads filter2_img.jpg
 
 ### Difference of Gaussians (DoG)
 <img src="output/dog_2.png" alt="Filter2 DoG" width="300"/>
+
+### GX and GY Images
+<img src="output/gx_image2.png" alt="Filter2 GX" width="300"/>
+<img src="output/gy_image2.png" alt="Filter2 GY" width

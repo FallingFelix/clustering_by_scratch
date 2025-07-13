@@ -123,7 +123,7 @@ Mat Sobelfilter(const Mat& original_image) {
     return sobel_result;
 }
 
-Mat dogFilters(const Mat& original_image) {
+Mat dogFilters(const Mat& original_image, string flag) {
     Mat gray;
     cvtColor(original_image, gray, COLOR_BGR2GRAY);
 
@@ -151,8 +151,12 @@ Mat dogFilters(const Mat& original_image) {
     Mat gx_disp, gy_disp;
     convertScaleAbs(gx, gx_disp);
     convertScaleAbs(gy, gy_disp);
-    imshow("gx Image", gx_disp);
-    imshow("gy Image", gy_disp);
+    imshow("gx Image_"+flag, gx_disp);
+    imshow("gy Image_"+flag, gy_disp);
+
+    imwrite("output/gx_image" + flag + ".png", gx_disp);
+    imwrite("output/gy_image" + flag + ".png", gy_disp);    
+    // Write the images to file
 
     // Compute gradient magnitude
     Mat magnitude;
@@ -213,7 +217,7 @@ int main(int argc, char** argv) {
     Mat filtered3x3 = applyFilterColor(image, kernel3x3);
     Mat filtered5x5 = applyFilterColor(image, kernel5x5);
     Mat sobel_image = Sobelfilter(image);
-    Mat dog_image = dogFilters(image);
+    Mat dog_image = dogFilters(image,flag);
 
     imshow("Original " + flag, image);
     imshow("Filtered 3x3 " + flag, filtered3x3);
