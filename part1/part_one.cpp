@@ -1,4 +1,4 @@
-#include <opencv2/opencv.hpp> // Include the main OpenCV header
+#include <opencv2/opencv.hpp> 
 #include <iostream>
 #include <vector>
 
@@ -106,21 +106,66 @@ Mat Sobelfilter(const Mat& original_image) {
         { 1,  2,  1}
     };
 
-    // Apply Sobel
     Mat gx = applySobel(gray, sobel_x);
     Mat gy = applySobel(gray, sobel_y);
 
-    // Gradient magnitude
+    // Prevent overflow
+    gx.convertTo(gx, CV_32F);
+    gy.convertTo(gy, CV_32F);
+
     Mat magnitude;
     cv::magnitude(gx, gy, magnitude);
 
-    // Convert to displayable format
+    // Normalize or scale safely
     Mat sobel_result;
-    magnitude.convertTo(sobel_result, CV_8U);
-    
+    normalize(magnitude, sobel_result, 0, 255, NORM_MINMAX);
+    sobel_result.convertTo(sobel_result, CV_8U);
+
     return sobel_result;
 }
 
+Mat dogFilters(const Mat& original_image) {
+    Mat gray;
+    cvtColor(original_image, gray, COLOR_BGR2GRAY);
+
+    // Define Sobel kernels
+    int sobel_x[3][3] = {
+        {-1, 0, 1},
+        {-2, 0, 2},
+        {-1, 0, 1}
+    };
+
+    int sobel_y[3][3] = {
+        {-1, -2, -1},
+        { 0,  0,  0},
+        { 1,  2,  1}
+    };
+
+    Mat gx = applySobel(gray, sobel_x);
+    Mat gy = applySobel(gray, sobel_y);
+
+    // Prevent overflow
+    gx.convertTo(gx, CV_32F);
+    gy.convertTo(gy, CV_32F);
+
+    // Optional display
+    Mat gx_disp, gy_disp;
+    convertScaleAbs(gx, gx_disp);
+    convertScaleAbs(gy, gy_disp);
+    imshow("gx Image", gx_disp);
+    imshow("gy Image", gy_disp);
+
+    // Compute gradient magnitude
+    Mat magnitude;
+    cv::magnitude(gx, gy, magnitude);
+
+    // Normalize for display
+    Mat sobel_result;
+    normalize(magnitude, sobel_result, 0, 255, NORM_MINMAX);
+    sobel_result.convertTo(sobel_result, CV_8U);
+
+    return sobel_result;
+}
 
 int main() {
     string imagePath = "";
@@ -159,6 +204,7 @@ int main() {
         Mat filtered3x3 = applyFilterColor(image, kernel3x3);
         Mat filtered5x5 = applyFilterColor(image, kernel5x5);
         Mat sobel_image = Sobelfilter(image);
+        Mat dog_image= dogFilters(image);
 
         imshow("Original Image " + to_string(i), image);
         imshow("Filtered 3x3 Gaussian " + to_string(i), filtered3x3);
@@ -171,5 +217,3 @@ int main() {
     destroyAllWindows(); 
     return 0;
 }
-
-
